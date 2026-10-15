@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLUXXL — Big Size Men's Fashion</title>
+  <meta name="description" content="PLUXXL - Thời trang nam Big Size cao cấp, mua và cho thuê suit, vest, sơ mi và quần âu.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<header class="header">
+  <a class="brand" href="#home">
+    <img src="assets/pluxxl-logo.png" alt="PLUXXL">
+    <span>PLUXXL</span>
+  </a>
+  <nav class="nav">
+    <a href="#home">Trang chủ</a>
+    <a href="#shop">Sản phẩm</a>
+    <a href="#rental">Cho thuê</a>
+    <a href="#size-guide">Size Guide</a>
+    <a href="#about">Về PLUXXL</a>
+  </nav>
+  <div class="header-actions">
+    <button class="icon-btn" id="searchBtn" title="Tìm kiếm">⌕</button>
+    <button class="icon-btn" id="wishlistBtn" title="Yêu thích">♡ <small id="wishCount">0</small></button>
+    <button class="icon-btn" id="accountBtn" title="Tài khoản">♙</button>
+    <button class="cart-btn" id="cartBtn">Giỏ hàng <span id="cartCount">0</span></button>
+    <button class="mobile-menu" id="mobileMenu">☰</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <p class="eyebrow">BIG SIZE MEN'S FASHION</p>
+      <h1>Dress beyond<br><em>the ordinary.</em></h1>
+      <p class="hero-copy">Suit, vest và trang phục lịch sự dành cho nam Big Size. Thiết kế chỉn chu, form đẹp, tự tin trong mọi dịp.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="#shop">MUA NGAY</a>
+        <a class="btn btn-outline" href="#rental">THUÊ SUIT</a>
+      </div>
+      <div class="hero-notes">
+        <span>✓ XL — 6XL</span><span>✓ Mua & thuê</span><span>✓ Tư vấn size</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <span>NEW COLLECTION</span>
+        <strong>THE<br>GENTLEMAN</strong>
+        <small>2026 / PLUXXL</small>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust-strip">
+    <div><b>XL — 6XL</b><span>Size chuyên biệt</span></div>
+    <div><b>BUY / RENT</b><span>Mua hoặc thuê</span></div>
+    <div><b>FIT SUPPORT</b><span>Tư vấn chọn size</span></div>
+    <div><b>QUALITY</b><span>Kiểm tra trước khi giao</span></div>
+  </section>
+
+  <section class="section" id="shop">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">THE COLLECTION</p>
+        <h2>Trang phục <em>của bạn</em></h2>
+      </div>
+      <a href="#shop" class="text-link">Xem tất cả →</a>
+    </div>
+
+    <div class="category-tabs" id="categoryTabs">
+      <button class="active" data-cat="all">Tất cả</button>
+      <button data-cat="suit">Suit & Vest</button>
+      <button data-cat="shirt">Sơ mi</button>
+      <button data-cat="trousers">Quần âu</button>
+      <button data-cat="accessory">Phụ kiện</button>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-box"><span>⌕</span><input id="productSearch" placeholder="Tìm suit, vest, sơ mi..."></div>
+      <select id="sizeFilter"><option value="all">Tất cả size</option><option>XL</option><option>XXL</option><option>3XL</option><option>4XL</option><option>5XL</option><option>6XL</option></select>
+      <select id="sortFilter"><option value="featured">Nổi bật</option><option value="low">Giá thấp → cao</option><option value="high">Giá cao → thấp</option></select>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+  </section>
+
+  <section class="rental-banner" id="rental">
+    <div>
+      <p class="eyebrow">PLUXXL RENTAL</p>
+      <h2>Thuê một bộ suit.<br><em>Ghi dấu một sự kiện.</em></h2>
+      <p>Wedding · Party · Business · Photoshoot</p>
+      <a class="btn btn-gold" href="#shop">KHÁM PHÁ SUIT CHO THUÊ</a>
+    </div>
+    <div class="rental-steps">
+      <div><b>01</b><span>Chọn bộ suit</span></div>
+      <div><b>02</b><span>Chọn size & ngày</span></div>
+      <div><b>03</b><span>Nhận & thử đồ</span></div>
+      <div><b>04</b><span>Trả đồ đúng hẹn</span></div>
+    </div>
+  </section>
+
+  <section class="section split-section" id="size-guide">
+    <div class="size-copy">
+      <p class="eyebrow">FIND YOUR FIT</p>
+      <h2>Không còn phải<br><em>ngại chọn size.</em></h2>
+      <p>PLUXXL tập trung vào vóc dáng Big Size. Hãy đo 3 thông số cơ bản để tìm size gần nhất.</p>
+      <button class="btn btn-dark" id="openSizeGuide">XEM SIZE GUIDE</button>
+    </div>
+    <div class="size-table-wrap">
+      <table class="size-table">
+        <thead><tr><th>Size</th><th>Ngực</th><th>Eo</th><th>Chiều cao</th></tr></thead>
+        <tbody>
+          <tr><td>XL</td><td>108–114</td><td>94–100</td><td>165–180</td></tr>
+          <tr><td>XXL</td><td>114–120</td><td>100–106</td><td>165–185</td></tr>
+          <tr><td>3XL</td><td>120–126</td><td>106–112</td><td>165–190</td></tr>
+          <tr><td>4XL</td><td>126–134</td><td>112–120</td><td>165–195</td></tr>
+          <tr><td>5XL</td><td>134–142</td><td>120–128</td><td>165–200</td></tr>
+          <tr><td>6XL</td><td>142–150</td><td>128–138</td><td>165–200</td></tr>
+        </tbody>
+      </table>
+      <small>* Đơn vị: cm. Bảng mang tính tham khảo; form từng sản phẩm có thể khác nhau.</small>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="about-logo"><img src="assets/pluxxl-logo.png" alt="PLUXXL logo"></div>
+    <div>
+      <p class="eyebrow">ABOUT PLUXXL</p>
+      <h2>Big size.<br><em>Big confidence.</em></h2>
+      <p>PLUXXL được xây dựng cho những người đàn ông muốn mặc đẹp, mặc vừa và xuất hiện thật tự tin trong những dịp quan trọng.</p>
+      <p>Từ một bộ suit đi đám cưới đến outfit công sở hằng ngày, chúng tôi tập trung vào form dáng, sự thoải mái và trải nghiệm mua/thuê đơn giản.</p>
+    </div>
+  </section>
+
+  <section class="newsletter">
+    <div><p class="eyebrow">STAY IN STYLE</p><h2>Nhận ưu đãi & bộ sưu tập mới</h2></div>
+    <form id="newsletterForm"><input type="email" required placeholder="Email của bạn"><button class="btn btn-gold">ĐĂNG KÝ</button></form>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand"><img src="assets/pluxxl-logo.png" alt=""><div><b>PLUXXL</b><span>BIG SIZE MEN'S FASHION</span></div></div>
+  <div><h4>SHOP</h4><a href="#shop">Suit & Vest</a><a href="#shop">Sơ mi</a><a href="#shop">Quần âu</a><a href="#shop">Phụ kiện</a></div>
+  <div><h4>HỖ TRỢ</h4><a href="#size-guide">Size Guide</a><a href="#" id="shippingLink">Giao hàng</a><a href="#" id="policyLink">Đổi trả</a><a href="#" id="contactLink">Liên hệ</a></div>
+  <div><h4>ADMIN</h4><a href="admin.html">Trang quản trị</a><p>© 2026 PLUXXL</p></div>
+</footer>
+
+<div class="modal" id="productModal"><div class="modal-card product-modal"><button class="close" data-close>×</button><div id="productModalBody"></div></div></div>
+<div class="modal" id="cartModal"><div class="modal-card"><button class="close" data-close>×</button><div class="modal-head"><p class="eyebrow">YOUR BAG</p><h2>Giỏ hàng</h2></div><div id="cartBody"></div></div></div>
+<div class="modal" id="accountModal"><div class="modal-card small-modal"><button class="close" data-close>×</button><div id="accountBody"></div></div></div>
+<div class="modal" id="wishlistModal"><div class="modal-card"><button class="close" data-close>×</button><div class="modal-head"><p class="eyebrow">SAVED ITEMS</p><h2>Yêu thích</h2></div><div id="wishlistBody"></div></div></div>
+<div class="modal" id="checkoutModal"><div class="modal-card checkout-modal"><button class="close" data-close>×</button><div id="checkoutBody"></div></div></div>
+<div class="modal" id="sizeModal"><div class="modal-card small-modal"><button class="close" data-close>×</button><p class="eyebrow">SIZE GUIDE</p><h2>Tìm size phù hợp</h2><form id="sizeForm" class="form"><label>Vòng ngực (cm)<input type="number" id="chest" min="80" required></label><label>Vòng eo (cm)<input type="number" id="waist" min="70" required></label><button class="btn btn-dark">TÌM SIZE</button></form><div id="sizeResult"></div></div></div>
+<div class="modal" id="infoModal"><div class="modal-card small-modal"><button class="close" data-close>×</button><div id="infoBody"></div></div></div>
+
+<script src="app.js"></script>
+</body>
+</html>

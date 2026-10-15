@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PLUXXL Admin</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<header class="header"><a class="brand" href="index.html"><img src="assets/pluxxl-logo.png"><span>PLUXXL</span></a><div><a class="btn btn-outline" href="index.html">← Về website</a></div></header>
+<main class="section">
+  <div class="section-head"><div><p class="eyebrow">ADMIN DASHBOARD</p><h2>Quản trị <em>PLUXXL</em></h2></div><button class="btn btn-dark" id="resetDemo">RESET DEMO DATA</button></div>
+  <div class="admin-stats" id="stats"></div>
+  <div class="admin-grid">
+    <section class="admin-panel"><div class="panel-head"><h3>Đơn hàng gần đây</h3><button id="clearOrders">Xóa dữ liệu đơn</button></div><div id="orders"></div></section>
+    <section class="admin-panel"><div class="panel-head"><h3>Sản phẩm</h3><span id="productCount"></span></div><div id="products"></div></section>
+  </div>
+</main>
+<script src="admin.js"></script>
+</body></html>
