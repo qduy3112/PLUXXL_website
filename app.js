@@ -1,14 +1,10 @@
-const PRODUCTS = [
- {id:1,name:"Navy Signature Suit",category:"suit",categoryName:"Suit & Vest",price:1990000,rent:350000,sizes:["XL","XXL","3XL","4XL","5XL","6XL"],color:"Navy",badge:"BEST SELLER",desc:"Bộ suit navy 2 mảnh với phom vai cân đối, phù hợp cưới hỏi, hội nghị và sự kiện.",image:"https://images.unsplash.com/photo-1598808503746-f34c53b9323e?auto=format&fit=crop&w=900&q=80"},
- {id:2,name:"Midnight Black Suit",category:"suit",categoryName:"Suit & Vest",price:2190000,rent:390000,sizes:["XL","XXL","3XL","4XL","5XL"],color:"Black",badge:"PREMIUM",desc:"Suit đen tối giản, lịch sự và dễ phối cho những dịp quan trọng.",image:"https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=900&q=80"},
- {id:3,name:"Grey Executive Vest",category:"suit",categoryName:"Suit & Vest",price:1690000,rent:300000,sizes:["XL","XXL","3XL","4XL","5XL","6XL"],color:"Grey",badge:"NEW",desc:"Vest xám thanh lịch, dễ kết hợp cùng sơ mi trắng và quần âu.",image:"https://images.unsplash.com/photo-1555069519-127aadedf1ee?auto=format&fit=crop&w=900&q=80"},
- {id:4,name:"Classic White Shirt",category:"shirt",categoryName:"Sơ mi",price:490000,rent:120000,sizes:["XL","XXL","3XL","4XL","5XL","6XL"],color:"White",badge:"ESSENTIAL",desc:"Sơ mi trắng cổ điển, chất liệu đứng form và thoải mái.",image:"https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=900&q=80"},
- {id:5,name:"Premium Black Trousers",category:"trousers",categoryName:"Quần âu",price:690000,rent:150000,sizes:["XL","XXL","3XL","4XL","5XL","6XL"],color:"Black",badge:"",desc:"Quần âu đen form Big Size, phù hợp đi cùng suit hoặc mặc công sở.",image:"https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=900&q=80"},
- {id:6,name:"Burgundy Tuxedo",category:"suit",categoryName:"Suit & Vest",price:2490000,rent:450000,sizes:["XL","XXL","3XL","4XL","5XL"],color:"Burgundy",badge:"EVENT",desc:"Tuxedo burgundy tạo điểm nhấn cho tiệc cưới, gala và photoshoot.",image:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=80"},
- {id:7,name:"Silk Black Tie",category:"accessory",categoryName:"Phụ kiện",price:290000,rent:70000,sizes:["XL","XXL","3XL","4XL","5XL","6XL"],color:"Black",badge:"",desc:"Cà vạt lụa đen tối giản cho phong cách formal.",image:"https://images.unsplash.com/photo-1589756823695-278bc923f962?auto=format&fit=crop&w=900&q=80"},
- {id:8,name:"Italian Leather Belt",category:"accessory",categoryName:"Phụ kiện",price:390000,rent:90000,sizes:["XL","XXL","3XL","4XL","5XL","6XL"],color:"Brown",badge:"",desc:"Thắt lưng da phong cách classic, có nhiều nấc điều chỉnh.",image:"https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=900&q=80"}
-];
+let PRODUCTS = loadProducts();
 
+function loadProducts(){
+  try { const saved = JSON.parse(localStorage.getItem("pluxxl_products") || "null"); if (Array.isArray(saved) && saved.length) return saved; } catch(e) {}
+  const defaults = window.PLUXXL_DEFAULT_PRODUCTS;
+  return defaults.map(p=>({...p,sizes:[...p.sizes]}));
+}
 let state = {
  cart: JSON.parse(localStorage.getItem("pluxxl_cart")||"[]"),
  wishlist: JSON.parse(localStorage.getItem("pluxxl_wishlist")||"[]"),
@@ -29,10 +25,12 @@ function renderProducts(){
  let arr=PRODUCTS.filter(p=>state.category==="all"||p.category===state.category)
    .filter(p=>!state.search||(`${p.name} ${p.categoryName} ${p.color}`).toLowerCase().includes(state.search.toLowerCase()))
    .filter(p=>state.size==="all"||p.sizes.includes(state.size));
- if(state.sort==="low")arr.sort((a,b)=>a.price-b.price); if(state.sort==="high")arr.sort((a,b)=>b.price-a.price);
+ if(state.sort==="low")arr.sort((a,b)=>(a.category==="lady")-(b.category==="lady") || a.price-b.price);
+ else if(state.sort==="high")arr.sort((a,b)=>(a.category==="lady")-(b.category==="lady") || b.price-a.price);
+ else arr.sort((a,b)=>(a.category==="lady")-(b.category==="lady") || a.id-b.id);
  $("#productGrid").innerHTML=arr.map(p=>`
   <article class="product-card">
-    <div class="product-image">${p.image?`<img src="${p.image}" alt="${p.name}" loading="lazy">`:`<span class="product-placeholder">PLUXXL</span>`}
+    <div class="product-image">${p.image?`<img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">`:`<span class="product-placeholder">PLUXXL</span>`}
       ${p.badge?`<span class="badge">${p.badge}</span>`:""}
       <button class="heart ${state.wishlist.includes(p.id)?"saved":""}" data-wish="${p.id}">${state.wishlist.includes(p.id)?"♥":"♡"}</button>
     </div>
@@ -53,8 +51,10 @@ function addCart(id,mode="buy",size=null,start="",end=""){
  const p=productById(id); if(!p)return;
  size=size||p.sizes[0];
  const key=`${id}-${mode}-${size}-${start}-${end}`;
+ const days = mode === "rent" ? Math.max(1, Math.ceil((new Date(end)-new Date(start))/86400000)) : 1;
+ const unit = mode === "rent" ? p.rent * days : p.price;
  const existing=state.cart.find(x=>x.key===key);
- if(existing)existing.qty++;else state.cart.push({key,id:p.id,qty:1,mode,size,start,end,unit:mode==="rent"?p.rent:p.price});
+ if(existing)existing.qty++;else state.cart.push({key,id:p.id,qty:1,mode,size,start,end,days,unit,rate:p.rent});
  save();renderProducts();toast(mode==="rent"?"Đã thêm bộ suit thuê vào giỏ":"Đã thêm sản phẩm vào giỏ");
 }
 function toggleWish(id){id=Number(id);state.wishlist=state.wishlist.includes(id)?state.wishlist.filter(x=>x!==id):[...state.wishlist,id];save();renderProducts();toast(state.wishlist.includes(id)?"Đã lưu vào yêu thích":"Đã bỏ khỏi yêu thích")}
@@ -90,7 +90,7 @@ function openCart(){
  if(!items.length){$("#cartBody").innerHTML=`<div class="empty">Giỏ hàng đang trống.<br><a class="btn btn-dark" style="margin-top:18px" href="#shop" onclick="closeModals()">TIẾP TỤC MUA SẮM</a></div>`;openModal("cartModal");return}
  $("#cartBody").innerHTML=items.map((x,i)=>{const p=productById(x.id);return `
  <div class="cart-item"><div class="cart-thumb">${p.image?`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover">`:"PX"}</div>
- <div><h4>${p.name}</h4><p>${x.mode==="rent"?"Thuê":"Mua"} · Size ${x.size}${x.start?` · ${x.start} → ${x.end}`:""}</p><strong>${money(x.unit)}</strong></div>
+ <div><h4>${p.name}</h4><p>${x.mode==="rent"?"Thuê":"Mua"} · Size ${x.size}${x.start?` · ${x.start} → ${x.end}`:""}</p><strong>${money(x.unit)}${x.mode==="rent"?` <small>(${x.days||1} ngày)</small>`:""}</strong></div>
  <div class="qty"><button data-dec="${i}">−</button><b>${x.qty}</b><button data-inc="${i}">+</button><button data-remove="${i}" style="margin-left:8px;background:transparent">×</button></div></div>`}).join("");
  const total=items.reduce((s,x)=>s+x.unit*x.qty,0);
  $("#cartBody").insertAdjacentHTML("beforeend",`<div class="cart-total"><span>Tạm tính</span><span>${money(total)}</span></div><button class="btn btn-dark" style="width:100%" id="checkoutBtn">TIẾN HÀNH ĐẶT HÀNG</button>`);
@@ -101,9 +101,9 @@ function checkout(){
  const total=state.cart.reduce((s,x)=>s+x.unit*x.qty,0);
  $("#checkoutBody").innerHTML=`<div class="modal-head"><p class="eyebrow">CHECKOUT</p><h2>Thông tin đặt hàng</h2></div>
  <div class="checkout-grid"><form id="checkoutForm" class="form"><div class="form-section"><h3>Thông tin nhận hàng</h3><label>Họ và tên<input name="name" required value="${state.user?.name||""}"></label><label>Số điện thoại<input name="phone" required pattern="[0-9]{9,11}"></label><label>Email<input type="email" name="email" required value="${state.user?.email||""}"></label><label>Địa chỉ<input name="address" required></label><label>Ghi chú<textarea name="note" rows="3" style="width:100%;margin-top:6px;border:1px solid var(--line);padding:11px"></textarea></label></div><div class="form-section"><h3>Thanh toán</h3><label><input type="radio" name="payment" value="cod" checked> COD — Thanh toán khi nhận</label><label><input type="radio" name="payment" value="bank"> Chuyển khoản ngân hàng</label></div><button class="btn btn-dark">XÁC NHẬN ĐẶT HÀNG</button></form>
- <aside class="checkout-summary"><h3>Đơn hàng</h3>${state.cart.map(x=>{const p=productById(x.id);return `<div class="summary-row"><span>${p.name} × ${x.qty}</span><span>${money(x.unit*x.qty)}</span></div>`}).join("")}<div class="summary-total"><span>Tổng</span><span>${money(total)}</span></div></aside></div>`;
+ <aside class="checkout-summary"><h3>Đơn hàng</h3>${state.cart.map(x=>{const p=productById(x.id);return `<div class="summary-row"><span>${p.name} × ${x.qty}${x.mode==="rent"?` · thuê ${x.days||1} ngày`:""}</span><span>${money(x.unit*x.qty)}</span></div>`}).join("")}<div class="summary-total"><span>Tổng</span><span>${money(total)}</span></div></aside></div>`;
  closeModals();openModal("checkoutModal");
- $("#checkoutForm").onsubmit=e=>{e.preventDefault();const fd=new FormData(e.target);const order={id:"PX"+Date.now().toString().slice(-7),date:new Date().toLocaleString("vi-VN"),items:state.cart,total,name:fd.get("name"),phone:fd.get("phone"),email:fd.get("email"),address:fd.get("address"),payment:fd.get("payment"),status:"Mới"};localStorage.setItem("pluxxl_last_order",JSON.stringify(order));localStorage.setItem("pluxxl_orders",JSON.stringify([order,...JSON.parse(localStorage.getItem("pluxxl_orders")||"[]")]));state.cart=[];save();closeModals();renderProducts();showOrderSuccess(order)};
+ $("#checkoutForm").onsubmit=e=>{e.preventDefault();const fd=new FormData(e.target);const order={id:"PX"+Date.now().toString().slice(-7),date:new Date().toLocaleString("vi-VN"),items:state.cart.map(x=>({...x,name:productById(x.id)?.name||"Sản phẩm"})),total,name:fd.get("name"),phone:fd.get("phone"),email:fd.get("email"),address:fd.get("address"),payment:fd.get("payment"),status:"Mới"};localStorage.setItem("pluxxl_last_order",JSON.stringify(order));localStorage.setItem("pluxxl_orders",JSON.stringify([order,...JSON.parse(localStorage.getItem("pluxxl_orders")||"[]")]));state.cart=[];save();closeModals();renderProducts();showOrderSuccess(order)};
 }
 function showOrderSuccess(order){$("#infoBody").innerHTML=`<p class="eyebrow">ORDER CONFIRMED</p><h2>Đặt hàng thành công</h2><p>Cảm ơn <b>${order.name}</b>. Mã đơn hàng của bạn là <b>${order.id}</b>.</p><p>Tổng giá trị: <b>${money(order.total)}</b></p><button class="btn btn-dark" data-close style="margin-top:15px">ĐÓNG</button>`;openModal("infoModal");}
 

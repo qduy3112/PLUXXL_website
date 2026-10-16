@@ -1,22 +1,19 @@
-const PRODUCTS=[
-{id:1,name:"Navy Signature Suit",category:"Suit & Vest",price:1990000,rent:350000},
-{id:2,name:"Midnight Black Suit",category:"Suit & Vest",price:2190000,rent:390000},
-{id:3,name:"Grey Executive Vest",category:"Suit & Vest",price:1690000,rent:300000},
-{id:4,name:"Classic White Shirt",category:"Sơ mi",price:490000,rent:120000},
-{id:5,name:"Premium Black Trousers",category:"Quần âu",price:690000,rent:150000},
-{id:6,name:"Burgundy Tuxedo",category:"Suit & Vest",price:2490000,rent:450000},
-{id:7,name:"Silk Black Tie",category:"Phụ kiện",price:290000,rent:70000},
-{id:8,name:"Italian Leather Belt",category:"Phụ kiện",price:390000,rent:90000}
-];
-const money=n=>new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND",maximumFractionDigits:0}).format(n);
+let PRODUCTS = readProducts();
+const money=n=>new Intl.NumberFormat("vi-VN",{style:"currency",currency:"VND",maximumFractionDigits:0}).format(Number(n)||0);
+function readProducts(){try{const x=JSON.parse(localStorage.getItem("pluxxl_products")||"null");if(Array.isArray(x)&&x.length)return x;}catch(e){}return window.PLUXXL_DEFAULT_PRODUCTS.map(p=>({...p,sizes:[...p.sizes]}));}
+function saveProducts(){localStorage.setItem("pluxxl_products",JSON.stringify(PRODUCTS));}
 function render(){
- const orders=JSON.parse(localStorage.getItem("pluxxl_orders")||"[]");
- const revenue=orders.reduce((s,o)=>s+o.total,0), rentals=orders.reduce((s,o)=>s+o.items.filter(x=>x.mode==="rent").length,0);
- document.querySelector("#stats").innerHTML=`<div><b>${orders.length}</b><span>Đơn hàng</span></div><div><b>${money(revenue)}</b><span>Doanh thu</span></div><div><b>${rentals}</b><span>Đơn thuê</span></div><div><b>${PRODUCTS.length}</b><span>Sản phẩm</span></div>`;
- document.querySelector("#orders").innerHTML=orders.length?orders.map(o=>`<div class="admin-row"><div><b>${o.id}</b><small>${o.date} · ${o.name}</small></div><strong>${money(o.total)}</strong><span class="status">${o.status}</span></div>`).join(""):"<div class='empty'>Chưa có đơn hàng.</div>";
- document.querySelector("#products").innerHTML=PRODUCTS.map(p=>`<div class="admin-row"><div><b>${p.name}</b><small>${p.category} · Thuê ${money(p.rent)}/ngày</small></div><strong>${money(p.price)}</strong><button onclick="alert('Demo CRUD: có thể nối API/Database ở bước backend.')">Sửa</button></div>`).join("");
+ const orders=JSON.parse(localStorage.getItem("pluxxl_orders")||"[]"), revenue=orders.reduce((s,o)=>s+(Number(o.total)||0),0), rentals=orders.reduce((s,o)=>s+(o.items||[]).filter(x=>x.mode==="rent").length,0);
+ document.querySelector("#stats").innerHTML=`<div><b>${orders.length}</b><span>Đơn hàng</span></div><div><b>${money(revenue)}</b><span>Tổng giá trị đơn</span></div><div><b>${rentals}</b><span>Đơn thuê</span></div><div><b>${PRODUCTS.length}</b><span>Sản phẩm</span></div>`;
+ document.querySelector("#orders").innerHTML=orders.length?orders.map(o=>`<div class="admin-row"><div><b>${o.id}</b><small>${o.date} · ${o.name} · ${o.phone||""}</small><small>${(o.items||[]).map(x=>`${x.mode==="rent"?"Thuê":"Mua"} ${x.name||""} ${x.start?x.start+" → "+x.end:""}`).join("; ")}</small></div><strong>${money(o.total)}</strong><span class="status">${o.status||"Mới"}</span></div>`).join(""):"<div class='empty'>Chưa có đơn hàng.</div>";
+ document.querySelector("#products").innerHTML=PRODUCTS.map(p=>`<div class="admin-row"><div><b>${escapeHtml(p.name)}</b><small>${escapeHtml(p.categoryName||p.category)} · Thuê ${money(p.rent)}/ngày</small><small>${money(p.price)} · Size ${(p.sizes||[]).join(", ")}</small></div><strong>${money(p.price)}</strong><div class="admin-buttons"><button type="button" data-edit="${p.id}">Sửa</button><button type="button" data-delete="${p.id}">Xóa</button></div></div>`).join("");
  document.querySelector("#productCount").textContent=PRODUCTS.length+" sản phẩm";
 }
-document.querySelector("#clearOrders").onclick=()=>{if(confirm("Xóa toàn bộ đơn demo?")){localStorage.removeItem("pluxxl_orders");render()}};
-document.querySelector("#resetDemo").onclick=()=>{localStorage.removeItem("pluxxl_orders");localStorage.removeItem("pluxxl_cart");localStorage.removeItem("pluxxl_wishlist");alert("Đã reset dữ liệu demo.");render()};
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function resetForm(){document.querySelector("#productForm").reset();document.querySelector('[name="id"]').value="";document.querySelector('[name="sizes"]').value="XL, XXL, 3XL, 4XL, 5XL, 6XL";document.querySelector("#formTitle").textContent="Thêm sản phẩm";document.querySelector("#saveProductBtn").textContent="LƯU SẢN PHẨM";document.querySelector("#cancelEdit").style.display="none";}
+document.querySelector("#productForm").onsubmit=e=>{e.preventDefault();const fd=new FormData(e.target), id=Number(fd.get("id"))||Date.now();const category=fd.get("category"),categoryName={suit:"Suit & Vest",shirt:"Sơ mi",trousers:"Quần âu",accessory:"Phụ kiện",lady:"Lady Collection"}[category];const p={id,name:fd.get("name").trim(),category,categoryName,price:Number(fd.get("price")),rent:Number(fd.get("rent")),color:fd.get("color").trim(),badge:fd.get("badge").trim(),image:fd.get("image").trim(),sizes:fd.get("sizes").split(",").map(s=>s.trim().toUpperCase()).filter(Boolean),desc:fd.get("desc").trim()};if(!p.sizes.length){alert("Vui lòng nhập ít nhất một size.");return}const index=PRODUCTS.findIndex(x=>x.id===id);if(index>=0)PRODUCTS[index]=p;else PRODUCTS.unshift(p);saveProducts();render();resetForm();alert(index>=0?"Đã cập nhật sản phẩm.":"Đã thêm sản phẩm.");};
+document.querySelector("#products").onclick=e=>{const edit=e.target.dataset.edit, del=e.target.dataset.delete;if(edit){const p=PRODUCTS.find(x=>x.id===Number(edit));if(!p)return;const f=document.querySelector("#productForm");for(const key of ["id","name","price","rent","color","badge","image","desc"])f.elements[key].value=p[key]??"";f.elements.category.value=p.category;f.elements.sizes.value=(p.sizes||[]).join(", ");document.querySelector("#formTitle").textContent="Sửa sản phẩm";document.querySelector("#saveProductBtn").textContent="CẬP NHẬT SẢN PHẨM";document.querySelector("#cancelEdit").style.display="inline-block";f.scrollIntoView({behavior:"smooth",block:"start"});}if(del){const p=PRODUCTS.find(x=>x.id===Number(del));if(p&&confirm(`Xóa sản phẩm “${p.name}”?`)){PRODUCTS=PRODUCTS.filter(x=>x.id!==p.id);saveProducts();render();resetForm();}}};
+document.querySelector("#cancelEdit").onclick=resetForm;
+document.querySelector("#clearOrders").onclick=()=>{if(confirm("Xóa toàn bộ đơn hàng trên trình duyệt này?")){localStorage.removeItem("pluxxl_orders");render();}};
+document.querySelector("#resetDemo").onclick=()=>{if(confirm("Khôi phục 16 sản phẩm mặc định? Các chỉnh sửa sản phẩm sẽ bị mất.")){PRODUCTS=window.PLUXXL_DEFAULT_PRODUCTS.map(p=>({...p,sizes:[...p.sizes]}));saveProducts();render();resetForm();}};
 render();

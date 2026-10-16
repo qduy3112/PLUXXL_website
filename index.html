@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PLUXXL — Big Size Men's Fashion</title>
-  <meta name="description" content="PLUXXL - Thời trang nam Big Size cao cấp, mua và cho thuê suit, vest, sơ mi và quần âu.">
+  <title>PLUXXL — Big Size Fashion</title>
+  <meta name="description" content="PLUXXL - Thời trang Big Size cao cấp cho nam và nữ, mua và cho thuê trang phục.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -37,9 +37,9 @@
 <main>
   <section class="hero" id="home">
     <div class="hero-content">
-      <p class="eyebrow">BIG SIZE MEN'S FASHION</p>
+      <p class="eyebrow">BIG SIZE FASHION · MEN & LADY</p>
       <h1>Dress beyond<br><em>the ordinary.</em></h1>
-      <p class="hero-copy">Suit, vest và trang phục lịch sự dành cho nam Big Size. Thiết kế chỉn chu, form đẹp, tự tin trong mọi dịp.</p>
+      <p class="hero-copy">Thời trang Big Size cho nam và nữ: suit, blazer, đầm dạ hội và trang phục dự tiệc. Thiết kế chỉn chu, tự tin trong mọi dịp.</p>
       <div class="hero-actions">
         <a class="btn btn-gold" href="#shop">MUA NGAY</a>
         <a class="btn btn-outline" href="#rental">THUÊ SUIT</a>
@@ -51,7 +51,7 @@
     <div class="hero-visual">
       <div class="hero-card">
         <span>NEW COLLECTION</span>
-        <strong>THE<br>GENTLEMAN</strong>
+        <strong>THE<br>CONFIDENCE</strong>
         <small>2026 / PLUXXL</small>
       </div>
     </div>
@@ -79,10 +79,11 @@
       <button data-cat="shirt">Sơ mi</button>
       <button data-cat="trousers">Quần âu</button>
       <button data-cat="accessory">Phụ kiện</button>
+      <button data-cat="lady">Lady Collection</button>
     </div>
 
     <div class="toolbar">
-      <div class="search-box"><span>⌕</span><input id="productSearch" placeholder="Tìm suit, vest, sơ mi..."></div>
+      <div class="search-box"><span>⌕</span><input id="productSearch" placeholder="Tìm suit, đầm, blazer..."></div>
       <select id="sizeFilter"><option value="all">Tất cả size</option><option>XL</option><option>XXL</option><option>3XL</option><option>4XL</option><option>5XL</option><option>6XL</option></select>
       <select id="sortFilter"><option value="featured">Nổi bật</option><option value="low">Giá thấp → cao</option><option value="high">Giá cao → thấp</option></select>
     </div>
@@ -133,8 +134,8 @@
     <div>
       <p class="eyebrow">ABOUT PLUXXL</p>
       <h2>Big size.<br><em>Big confidence.</em></h2>
-      <p>PLUXXL được xây dựng cho những người đàn ông muốn mặc đẹp, mặc vừa và xuất hiện thật tự tin trong những dịp quan trọng.</p>
-      <p>Từ một bộ suit đi đám cưới đến outfit công sở hằng ngày, chúng tôi tập trung vào form dáng, sự thoải mái và trải nghiệm mua/thuê đơn giản.</p>
+      <p>PLUXXL dành cho người yêu thời trang Big Size, với bộ sưu tập nam và Lady Collection cho những dịp thường ngày đến sự kiện đặc biệt.</p>
+      <p>Từ suit, blazer đến đầm dự tiệc, chúng tôi tập trung vào form dáng, sự thoải mái và trải nghiệm mua/thuê đơn giản.</p>
     </div>
   </section>
 
@@ -145,7 +146,7 @@
 </main>
 
 <footer class="footer">
-  <div class="footer-brand"><img src="assets/pluxxl-logo.png" alt=""><div><b>PLUXXL</b><span>BIG SIZE MEN'S FASHION</span></div></div>
+  <div class="footer-brand"><img src="assets/pluxxl-logo.png" alt=""><div><b>PLUXXL</b><span>BIG SIZE FASHION · MEN & LADY</span></div></div>
   <div><h4>SHOP</h4><a href="#shop">Suit & Vest</a><a href="#shop">Sơ mi</a><a href="#shop">Quần âu</a><a href="#shop">Phụ kiện</a></div>
   <div><h4>HỖ TRỢ</h4><a href="#size-guide">Size Guide</a><a href="#" id="shippingLink">Giao hàng</a><a href="#" id="policyLink">Đổi trả</a><a href="#" id="contactLink">Liên hệ</a></div>
   <div><h4>ADMIN</h4><a href="admin.html">Trang quản trị</a><p>© 2026 PLUXXL</p></div>
@@ -159,6 +160,7 @@
 <div class="modal" id="sizeModal"><div class="modal-card small-modal"><button class="close" data-close>×</button><p class="eyebrow">SIZE GUIDE</p><h2>Tìm size phù hợp</h2><form id="sizeForm" class="form"><label>Vòng ngực (cm)<input type="number" id="chest" min="80" required></label><label>Vòng eo (cm)<input type="number" id="waist" min="70" required></label><button class="btn btn-dark">TÌM SIZE</button></form><div id="sizeResult"></div></div></div>
 <div class="modal" id="infoModal"><div class="modal-card small-modal"><button class="close" data-close>×</button><div id="infoBody"></div></div></div>
 
+<script src="catalog.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

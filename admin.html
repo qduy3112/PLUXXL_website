@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PLUXXL Admin</title><link rel="stylesheet" href="styles.css"></head>
 <body>
-<header class="header"><a class="brand" href="index.html"><img src="assets/pluxxl-logo.png"><span>PLUXXL</span></a><div><a class="btn btn-outline" href="index.html">← Về website</a></div></header>
+<header class="header"><a class="brand" href="index.html"><img src="assets/pluxxl-logo.png" alt=""><span>PLUXXL</span></a><div><a class="btn btn-outline" href="index.html">← Về website</a></div></header>
 <main class="section">
-  <div class="section-head"><div><p class="eyebrow">ADMIN DASHBOARD</p><h2>Quản trị <em>PLUXXL</em></h2></div><button class="btn btn-dark" id="resetDemo">RESET DEMO DATA</button></div>
+  <div class="section-head"><div><p class="eyebrow">ADMIN DASHBOARD</p><h2>Quản trị <em>PLUXXL</em></h2><p style="color:var(--muted)">Quản lý sản phẩm và đơn hàng demo trên trình duyệt hiện tại.</p></div><button class="btn btn-dark" id="resetDemo">Khôi phục dữ liệu mẫu</button></div>
   <div class="admin-stats" id="stats"></div>
-  <div class="admin-grid">
-    <section class="admin-panel"><div class="panel-head"><h3>Đơn hàng gần đây</h3><button id="clearOrders">Xóa dữ liệu đơn</button></div><div id="orders"></div></section>
-    <section class="admin-panel"><div class="panel-head"><h3>Sản phẩm</h3><span id="productCount"></span></div><div id="products"></div></section>
-  </div>
+  <section class="admin-panel" style="margin-bottom:25px"><div class="panel-head"><h3 id="formTitle">Thêm sản phẩm</h3><button id="cancelEdit" type="button" style="display:none">Hủy sửa</button></div>
+   <form id="productForm" class="admin-form">
+    <input type="hidden" name="id"><label>Tên sản phẩm<input name="name" required maxlength="100"></label>
+    <label>Danh mục<select name="category"><option value="suit">Suit & Vest</option><option value="shirt">Sơ mi</option><option value="trousers">Quần âu</option><option value="accessory">Phụ kiện</option><option value="lady">Lady Collection</option></select></label>
+    <label>Giá mua (VNĐ)<input name="price" type="number" min="0" required></label><label>Giá thuê/ngày (VNĐ)<input name="rent" type="number" min="0" required></label>
+    <label>Màu sắc<input name="color" required></label><label>Badge<input name="badge" placeholder="NEW, PREMIUM..."></label>
+    <label>Ảnh (URL)<input name="image" type="url" placeholder="https://..."></label><label>Size (cách nhau bằng dấu phẩy)<input name="sizes" value="XL, XXL, 3XL, 4XL, 5XL, 6XL" required></label>
+    <label class="wide">Mô tả<textarea name="desc" rows="3" required></textarea></label>
+    <div class="wide"><button class="btn btn-dark" id="saveProductBtn">LƯU SẢN PHẨM</button></div>
+   </form>
+  </section>
+  <div class="admin-grid"><section class="admin-panel"><div class="panel-head"><h3>Đơn hàng gần đây</h3><button id="clearOrders">Xóa dữ liệu đơn</button></div><div id="orders"></div></section>
+  <section class="admin-panel"><div class="panel-head"><h3>Sản phẩm</h3><span id="productCount"></span></div><div id="products"></div></section></div>
 </main>
-<script src="admin.js"></script>
+<script src="catalog.js"></script><script src="admin.js"></script>
 </body></html>
